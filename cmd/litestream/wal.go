@@ -8,7 +8,7 @@ import (
 	"text/tabwriter"
 	"time"
 
-	"github.com/benbjohnson/litestream"
+	"github.com/throneless-tech/litestream-sqlcipher"
 )
 
 // WALCommand represents a command to list WAL files for a database.

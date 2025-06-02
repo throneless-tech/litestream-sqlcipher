@@ -13,15 +13,16 @@ import (
 	"log/slog"
 	"math"
 	"math/rand"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strings"
 	"sync"
 	"time"
 
-	"github.com/benbjohnson/litestream/internal"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/throneless-tech/litestream-sqlcipher/internal"
 )
 
 // Default DB settings.
@@ -49,6 +50,7 @@ type DB struct {
 	pageSize int           // page size, in bytes
 	notify   chan struct{} // closes on WAL change
 	chkMu    sync.Mutex    // checkpoint lock
+	key      string        // SQLCipher key
 
 	fileInfo os.FileInfo // db info cached during init
 	dirInfo  os.FileInfo // parent dir info cached during init
@@ -113,13 +115,14 @@ type DB struct {
 }
 
 // NewDB returns a new instance of DB for a given path.
-func NewDB(path string) *DB {
+func NewDB(path string, key string) *DB {
 	dir, file := filepath.Split(path)
 
 	db := &DB{
 		path:     path,
 		metaPath: filepath.Join(dir, "."+file+MetaDirSuffix),
 		notify:   make(chan struct{}),
+		key:      url.QueryEscape(key),
 
 		MinCheckpointPageN: DefaultMinCheckpointPageN,
 		MaxCheckpointPageN: DefaultMaxCheckpointPageN,
@@ -414,6 +417,7 @@ func (db *DB) init() (err error) {
 
 	dsn := db.path
 	dsn += fmt.Sprintf("?_busy_timeout=%d", db.BusyTimeout.Milliseconds())
+	dsn += fmt.Sprintf("&_cipher=sqlcipher&_legacy=3&_hmac_use=off&_kdf_iter=4000&_legacy_page_size=1024&_key=%s", db.key)
 
 	// Connect to SQLite database. Use the driver registered with a hook to
 	// prevent WAL files from being removed.
@@ -1482,14 +1486,15 @@ func (db *DB) CalcRestoreTarget(ctx context.Context, opt RestoreOptions) (*Repli
 }
 
 // applyWAL performs a truncating checkpoint on the given database.
-func applyWAL(ctx context.Context, index int, dbPath string) error {
+func applyWAL(ctx context.Context, index int, dbPath string, key string) error {
 	// Copy WAL file from it's staging path to the correct "-wal" location.
 	if err := os.Rename(fmt.Sprintf("%s-%08x-wal", dbPath, index), dbPath+"-wal"); err != nil {
 		return err
 	}
 
 	// Open SQLite database and force a truncating checkpoint.
-	d, err := sql.Open("sqlite3", dbPath)
+	dsn := fmt.Sprintf("%s?_cipher=sqlcipher&_legacy=3&_hmac_use=off&_kdf_iter=4000&_legacy_page_size=1024&_key=%s", dbPath, key)
+	d, err := sql.Open("sqlite3", dsn)
 	if err != nil {
 		return err
 	}

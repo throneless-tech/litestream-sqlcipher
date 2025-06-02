@@ -5,10 +5,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	main "github.com/benbjohnson/litestream/cmd/litestream"
-	"github.com/benbjohnson/litestream/file"
-	"github.com/benbjohnson/litestream/gcs"
-	"github.com/benbjohnson/litestream/s3"
+	main "github.com/throneless-tech/litestream-sqlcipher/cmd/litestream"
+	"github.com/throneless-tech/litestream-sqlcipher/file"
+	"github.com/throneless-tech/litestream-sqlcipher/gcs"
+	"github.com/throneless-tech/litestream-sqlcipher/s3"
 )
 
 func TestReadConfigFile(t *testing.T) {

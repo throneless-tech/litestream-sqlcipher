@@ -11,12 +11,12 @@ import (
 	"os"
 	"os/exec"
 
-	"github.com/benbjohnson/litestream"
-	"github.com/benbjohnson/litestream/abs"
-	"github.com/benbjohnson/litestream/file"
-	"github.com/benbjohnson/litestream/gcs"
-	"github.com/benbjohnson/litestream/s3"
-	"github.com/benbjohnson/litestream/sftp"
+	"github.com/throneless-tech/litestream-sqlcipher"
+	"github.com/throneless-tech/litestream-sqlcipher/abs"
+	"github.com/throneless-tech/litestream-sqlcipher/file"
+	"github.com/throneless-tech/litestream-sqlcipher/gcs"
+	"github.com/throneless-tech/litestream-sqlcipher/s3"
+	"github.com/throneless-tech/litestream-sqlcipher/sftp"
 	"github.com/mattn/go-shellwords"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )

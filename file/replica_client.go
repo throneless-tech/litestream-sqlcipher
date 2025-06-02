@@ -7,8 +7,8 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/benbjohnson/litestream"
-	"github.com/benbjohnson/litestream/internal"
+	"github.com/throneless-tech/litestream-sqlcipher"
+	"github.com/throneless-tech/litestream-sqlcipher/internal"
 )
 
 // ReplicaClientType is the client type for this package.

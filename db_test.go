@@ -9,18 +9,18 @@ import (
 	"testing"
 	"time"
 
-	"github.com/benbjohnson/litestream"
+	"github.com/throneless-tech/litestream-sqlcipher"
 )
 
 func TestDB_Path(t *testing.T) {
-	db := litestream.NewDB("/tmp/db")
+	db := litestream.NewDB("/tmp/db", "test")
 	if got, want := db.Path(), `/tmp/db`; got != want {
 		t.Fatalf("Path()=%v, want %v", got, want)
 	}
 }
 
 func TestDB_WALPath(t *testing.T) {
-	db := litestream.NewDB("/tmp/db")
+	db := litestream.NewDB("/tmp/db", "test")
 	if got, want := db.WALPath(), `/tmp/db-wal`; got != want {
 		t.Fatalf("WALPath()=%v, want %v", got, want)
 	}
@@ -28,13 +28,13 @@ func TestDB_WALPath(t *testing.T) {
 
 func TestDB_MetaPath(t *testing.T) {
 	t.Run("Absolute", func(t *testing.T) {
-		db := litestream.NewDB("/tmp/db")
+		db := litestream.NewDB("/tmp/db", "test")
 		if got, want := db.MetaPath(), `/tmp/.db-litestream`; got != want {
 			t.Fatalf("MetaPath()=%v, want %v", got, want)
 		}
 	})
 	t.Run("Relative", func(t *testing.T) {
-		db := litestream.NewDB("db")
+		db := litestream.NewDB("db", "test")
 		if got, want := db.MetaPath(), `.db-litestream`; got != want {
 			t.Fatalf("MetaPath()=%v, want %v", got, want)
 		}
@@ -42,28 +42,28 @@ func TestDB_MetaPath(t *testing.T) {
 }
 
 func TestDB_GenerationNamePath(t *testing.T) {
-	db := litestream.NewDB("/tmp/db")
+	db := litestream.NewDB("/tmp/db", "test")
 	if got, want := db.GenerationNamePath(), `/tmp/.db-litestream/generation`; got != want {
 		t.Fatalf("GenerationNamePath()=%v, want %v", got, want)
 	}
 }
 
 func TestDB_GenerationPath(t *testing.T) {
-	db := litestream.NewDB("/tmp/db")
+	db := litestream.NewDB("/tmp/db", "test")
 	if got, want := db.GenerationPath("xxxx"), `/tmp/.db-litestream/generations/xxxx`; got != want {
 		t.Fatalf("GenerationPath()=%v, want %v", got, want)
 	}
 }
 
 func TestDB_ShadowWALDir(t *testing.T) {
-	db := litestream.NewDB("/tmp/db")
+	db := litestream.NewDB("/tmp/db", "test")
 	if got, want := db.ShadowWALDir("xxxx"), `/tmp/.db-litestream/generations/xxxx/wal`; got != want {
 		t.Fatalf("ShadowWALDir()=%v, want %v", got, want)
 	}
 }
 
 func TestDB_ShadowWALPath(t *testing.T) {
-	db := litestream.NewDB("/tmp/db")
+	db := litestream.NewDB("/tmp/db", "test")
 	if got, want := db.ShadowWALPath("xxxx", 1000), `/tmp/.db-litestream/generations/xxxx/wal/000003e8.wal`; got != want {
 		t.Fatalf("ShadowWALPath()=%v, want %v", got, want)
 	}
@@ -614,7 +614,7 @@ func MustOpenDB(tb testing.TB) *litestream.DB {
 // MustOpenDBAt returns a new instance of a DB for a given path.
 func MustOpenDBAt(tb testing.TB, path string) *litestream.DB {
 	tb.Helper()
-	db := litestream.NewDB(path)
+	db := litestream.NewDB(path, "test")
 	db.MonitorInterval = 0 // disable background goroutine
 	if err := db.Open(); err != nil {
 		tb.Fatal(err)

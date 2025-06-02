@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/benbjohnson/litestream"
+	"github.com/throneless-tech/litestream-sqlcipher"
 )
 
 // RestoreCommand represents a command to restore a database from a backup.

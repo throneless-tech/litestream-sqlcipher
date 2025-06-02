@@ -17,13 +17,13 @@ import (
 	"time"
 
 	"filippo.io/age"
-	"github.com/benbjohnson/litestream"
-	"github.com/benbjohnson/litestream/abs"
-	"github.com/benbjohnson/litestream/file"
-	"github.com/benbjohnson/litestream/gcs"
-	"github.com/benbjohnson/litestream/s3"
-	"github.com/benbjohnson/litestream/sftp"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/throneless-tech/litestream-sqlcipher"
+	"github.com/throneless-tech/litestream-sqlcipher/abs"
+	"github.com/throneless-tech/litestream-sqlcipher/file"
+	"github.com/throneless-tech/litestream-sqlcipher/gcs"
+	"github.com/throneless-tech/litestream-sqlcipher/s3"
+	"github.com/throneless-tech/litestream-sqlcipher/sftp"
 	"gopkg.in/yaml.v2"
 )
 
@@ -290,6 +290,7 @@ type DBConfig struct {
 	BusyTimeout        *time.Duration `yaml:"busy-timeout"`
 	MinCheckpointPageN *int           `yaml:"min-checkpoint-page-count"`
 	MaxCheckpointPageN *int           `yaml:"max-checkpoint-page-count"`
+	Key                string         `yaml:"key"`
 
 	Replicas []*ReplicaConfig `yaml:"replicas"`
 }
@@ -302,7 +303,7 @@ func NewDBFromConfig(dbc *DBConfig) (*litestream.DB, error) {
 	}
 
 	// Initialize database with given path.
-	db := litestream.NewDB(path)
+	db := litestream.NewDB(path, dbc.Key)
 
 	// Override default database settings if specified in configuration.
 	if dbc.MetaPath != nil {

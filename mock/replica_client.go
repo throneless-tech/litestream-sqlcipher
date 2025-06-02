@@ -4,7 +4,7 @@ import (
 	"context"
 	"io"
 
-	"github.com/benbjohnson/litestream"
+	"github.com/throneless-tech/litestream-sqlcipher"
 )
 
 var _ litestream.ReplicaClient = (*ReplicaClient)(nil)

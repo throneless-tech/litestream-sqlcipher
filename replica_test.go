@@ -7,9 +7,9 @@ import (
 	"os"
 	"testing"
 
-	"github.com/benbjohnson/litestream"
-	"github.com/benbjohnson/litestream/file"
-	"github.com/benbjohnson/litestream/mock"
+	"github.com/throneless-tech/litestream-sqlcipher"
+	"github.com/throneless-tech/litestream-sqlcipher/file"
+	"github.com/throneless-tech/litestream-sqlcipher/mock"
 	"github.com/pierrec/lz4/v4"
 )
 

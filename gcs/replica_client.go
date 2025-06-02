@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"cloud.google.com/go/storage"
-	"github.com/benbjohnson/litestream"
-	"github.com/benbjohnson/litestream/internal"
+	"github.com/throneless-tech/litestream-sqlcipher"
+	"github.com/throneless-tech/litestream-sqlcipher/internal"
 	"google.golang.org/api/iterator"
 )
 

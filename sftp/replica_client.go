@@ -11,8 +11,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/benbjohnson/litestream"
-	"github.com/benbjohnson/litestream/internal"
+	"github.com/throneless-tech/litestream-sqlcipher"
+	"github.com/throneless-tech/litestream-sqlcipher/internal"
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
 )

@@ -3,7 +3,7 @@ package file_test
 import (
 	"testing"
 
-	"github.com/benbjohnson/litestream/file"
+	"github.com/throneless-tech/litestream-sqlcipher/file"
 )
 
 func TestReplicaClient_Path(t *testing.T) {
