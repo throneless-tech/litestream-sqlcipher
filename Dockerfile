@@ -1,13 +1,13 @@
-FROM golang:bookworm as builder
+FROM golang:trixie as builder
 
 WORKDIR /src/litestream
 COPY . .
 
 ARG LITESTREAM_VERSION=latest
-RUN apt update && apt install -y libssl-dev libsqlcipher-dev
+RUN apt update && apt install -y zlib1g-dev libzstd-dev libssl-dev libsqlcipher-dev
 RUN --mount=type=cache,target=/root/.cache/go-build \
 	--mount=type=cache,target=/go/pkg \
-	go build -ldflags "-s -w -X 'main.Version=${LITESTREAM_VERSION}' -extldflags '-static -lcrypto'" -tags libsqlcipher,osusergo,netgo,sqlite_omit_load_extension -o /usr/local/bin/litestream ./cmd/litestream
+	go build -ldflags "-s -w -X 'main.Version=${LITESTREAM_VERSION}' -extldflags '-static -lcrypto -lm -lz -lzstd'" -tags libsqlcipher,osusergo,netgo,sqlite_omit_load_extension -o /usr/local/bin/litestream ./cmd/litestream
 
 
 FROM alpine:3
